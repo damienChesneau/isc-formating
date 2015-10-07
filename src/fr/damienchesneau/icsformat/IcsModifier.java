@@ -9,8 +9,7 @@ import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
- *
- * @author dchesnea
+ * @author Damien Chesneau contact@damienchesneau.fr
  */
 class IcsModifier {
 
@@ -38,10 +37,10 @@ class IcsModifier {
 
     public void update() throws IOException {
         List<String> lines = getLines();
-        List<String> locations = lines.stream().filter((line) -> line.contains("LOCATION")).
-                collect(Collectors.<String>toList()).stream().map(line -> {
-                    return line.substring(9);// represents lenght of LOCATION_LABEL
-                }).collect(Collectors.<String>toList());
+        List<String> locations = lines.stream()
+                .filter((line) -> line.contains("LOCATION"))
+                .collect(Collectors.<String>toList()).stream().map(line -> line.substring(LOCATION_LABEL.length()))
+                .collect(Collectors.<String>toList());
         lines = lines.stream().map((line) -> {
             if (line.contains("LOCATION:")) {
                 return "LOCATION:" + IcsModifier.LOCATION;
@@ -54,30 +53,5 @@ class IcsModifier {
             return line;
         }).collect(Collectors.<String>toList());
         writeInNewFile(outputFile, lines);
-    }
-
-    /**
-     * In dev not use yet.
-     *
-     * @param content
-     * @param datas
-     * @return
-     */
-    private List<String> deleteElementWithWrongContent(String content, List<String> datas) {
-        datas.removeIf((s) -> s.contains(content));
-        int indexer = 0;
-        for (int i = 0; i < datas.size(); i++) {
-            if (datas.get(i).contains("BEGIN:VEVENT") && !datas.get(i + 4).contains("SUMMARY")) {
-//                datas.removeAll(datas.subList(i, i+10));
-                for (int j = 0; j < 11; j++) {
-                    if (datas.get(i).contains("END")) {
-                        datas.remove(i);
-                        break;
-                    }
-                    datas.remove(i);
-                }
-            }
-        }
-        return datas;
     }
 }

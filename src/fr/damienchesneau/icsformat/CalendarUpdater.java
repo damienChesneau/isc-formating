@@ -18,7 +18,6 @@ public class CalendarUpdater {
             inputFile = args[0];
             output = args[1];
         } else {
-            //System.out.println("Please use this app with tow parameters. First is input file the second is the output file.");
             JFileChooser fileToChoose = new JFileChooser();
             fileToChoose.showDialog(null, null);
             Path file = fileToChoose.getSelectedFile().toPath();
